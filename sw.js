@@ -1,5 +1,5 @@
 /* PWA offline cache (simple, deterministic) */
-const CACHE_NAME = "dentaku-v2";
+const CACHE_NAME = "dentaku-v3";
 const ASSETS = [
   "./",
   "./index.html",

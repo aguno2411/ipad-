@@ -9,7 +9,7 @@ const historyEl = document.getElementById("history");
  * - input: 今入力中の数（文字列）
  */
 const state = {
-  input: "0",
+  input: "",
   expr: [],
   justEvaluated: false
 };
@@ -39,14 +39,14 @@ function formatNumber(n, sig = 14) {
 
 function render() {
   historyEl.textContent = exprToHumanPreview();
-  screenEl.textContent = clampDisplay(state.input);
+  screenEl.textContent = clampDisplay(state.input === "" ? "0" : state.input);
 }
 
 function exprToHumanPreview() {
   const parts = state.expr.map((t) => (isNumberToken(t) ? formatNumber(Number(t)) : opToGlyph(t)));
   if (!state.justEvaluated) {
-    // 入力中は末尾にinputを付ける（"0"のみでも括弧の中では出したいので条件を緩める）
-    if (state.input !== "" && !(state.input === "0" && parts.length === 0)) parts.push(state.input);
+    // 入力中は末尾にinputを付ける（未入力 "" のときは付けない）
+    if (state.input !== "") parts.push(state.input);
   }
   return parts.join(" ");
 }
@@ -62,10 +62,10 @@ function inputNumber(d) {
   if (state.justEvaluated) {
     // "="直後の数字は新規入力として開始
     state.expr = [];
-    state.input = "0";
+    state.input = "";
     state.justEvaluated = false;
   }
-  if (state.input === "0") state.input = d;
+  if (state.input === "" || state.input === "0") state.input = d;
   else state.input += d;
   render();
 }
@@ -73,16 +73,17 @@ function inputNumber(d) {
 function inputDot() {
   if (state.justEvaluated) {
     state.expr = [];
-    state.input = "0";
+    state.input = "";
     state.justEvaluated = false;
   }
-  if (!state.input.includes(".")) state.input += ".";
+  if (state.input === "") state.input = "0.";
+  else if (!state.input.includes(".")) state.input += ".";
   render();
 }
 
 function clearAll() {
   state.expr = [];
-  state.input = "0";
+  state.input = "";
   state.justEvaluated = false;
   render();
 }
@@ -92,10 +93,20 @@ function backspace() {
     // 結果表示中は入力だけ消して続行
     state.justEvaluated = false;
   }
-  if (state.input.length <= 1 || (state.input.length === 2 && state.input.startsWith("-"))) {
-    state.input = "0";
-  } else {
-    state.input = state.input.slice(0, -1);
+  if (state.input !== "") {
+    if (state.input.length <= 1 || (state.input.length === 2 && state.input.startsWith("-"))) {
+      state.input = "";
+    } else {
+      state.input = state.input.slice(0, -1);
+    }
+    render();
+    return;
+  }
+
+  // 入力が空なら式を戻す（直前の数は入力に戻して編集可能にする）
+  const last = state.expr.pop();
+  if (last && isNumberToken(last)) {
+    state.input = last;
   }
   render();
 }
@@ -109,12 +120,9 @@ function errorState() {
 
 function flushInputIfNeeded() {
   if (state.input === "" || state.input === "エラー") return;
-  // 入力が "0" でも、直前が "(" のときは意味があるので積む（例: (0.5 )
   if (state.justEvaluated) state.justEvaluated = false;
-  // "0" だけで、まだ何も無いなら積まない（押してないのと同義）
-  if (state.input === "0" && state.expr.length === 0) return;
   state.expr.push(state.input);
-  state.input = "0";
+  state.input = "";
 }
 
 function lastToken() {
@@ -131,15 +139,13 @@ function pushOperator(op) {
   }
 
   // 値が入力中なら積む
-  if (state.input !== "0" || state.expr.length === 0) {
-    if (state.input !== "0" || state.expr.length > 0) flushInputIfNeeded();
-  }
+  if (state.input !== "") flushInputIfNeeded();
 
   const last = lastToken();
   if (last === null) {
     // 先頭の + は無視、- は単項マイナスとして入力に反映、* / は無視
     if (op === "-") {
-      state.input = state.input.startsWith("-") ? state.input.slice(1) : "-" + state.input;
+      state.input = state.input.startsWith("-") ? state.input.slice(1) : "-" + (state.input || "0");
       render();
     }
     return;
@@ -171,11 +177,14 @@ function pushParen(paren) {
   if (state.justEvaluated && paren === "(") {
     // 結果の後に "(" を押したら新規式開始
     state.expr = [];
-    state.input = "0";
+    state.input = "";
     state.justEvaluated = false;
   } else if (state.justEvaluated) {
     state.justEvaluated = false;
   }
+
+  // 入力中の数字があるなら、まず確定（これをしないと数字が括弧の中に吸い込まれる）
+  if (state.input !== "") flushInputIfNeeded();
 
   const last = lastToken();
 
@@ -188,11 +197,6 @@ function pushParen(paren) {
   }
 
   // ")"
-  // 入力中の数があるなら先に積む
-  if (state.input !== "0" || (last && last === "(")) {
-    if (state.input !== "0") flushInputIfNeeded();
-  }
-
   // "(" が存在しないなら無視
   if (!state.expr.includes("(")) return;
   // 直前が演算子 or "(" の場合は閉じない
@@ -205,7 +209,7 @@ function pushParen(paren) {
 function equals() {
   if (state.input === "エラー") return;
   // 入力中の数があるなら積む
-  if (state.input !== "0") flushInputIfNeeded();
+  if (state.input !== "") flushInputIfNeeded();
 
   const expr = [...state.expr];
   if (expr.length === 0) return;
