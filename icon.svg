@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a2537"/>
+      <stop offset="1" stop-color="#0b0f14"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d6cff" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#19c37d" stop-opacity="0.75"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="36" y="36" width="440" height="440" rx="92" fill="url(#bg)"/>
+  <rect x="52" y="52" width="408" height="408" rx="82" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
+
+  <!-- display -->
+  <rect x="108" y="104" width="296" height="92" rx="24" fill="rgba(255,255,255,0.06)"/>
+  <rect x="128" y="128" width="156" height="14" rx="7" fill="rgba(231,237,247,0.55)"/>
+  <rect x="128" y="154" width="212" height="18" rx="9" fill="rgba(231,237,247,0.85)"/>
+
+  <!-- keys -->
+  <g fill="rgba(255,255,255,0.06)">
+    <rect x="108" y="222" width="88" height="72" rx="18"/>
+    <rect x="212" y="222" width="88" height="72" rx="18"/>
+    <rect x="316" y="222" width="88" height="72" rx="18"/>
+
+    <rect x="108" y="308" width="88" height="72" rx="18"/>
+    <rect x="212" y="308" width="88" height="72" rx="18"/>
+    <rect x="316" y="308" width="88" height="72" rx="18"/>
+
+    <rect x="108" y="394" width="192" height="72" rx="18"/>
+    <rect x="316" y="394" width="88" height="72" rx="18"/>
+  </g>
+
+  <!-- operator accent -->
+  <rect x="316" y="222" width="88" height="72" rx="18" fill="url(#glow)" opacity="0.9"/>
+  <rect x="316" y="308" width="88" height="72" rx="18" fill="url(#glow)" opacity="0.85"/>
+  <rect x="316" y="394" width="88" height="72" rx="18" fill="url(#glow)" opacity="0.9"/>
+
+  <!-- symbols -->
+  <g stroke="#e7edf7" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+    <!-- plus -->
+    <path d="M152 260h0"/>
+    <path d="M140 260h24"/>
+    <path d="M152 248v24"/>
+
+    <!-- minus -->
+    <path d="M236 260h40"/>
+
+    <!-- multiply -->
+    <path d="M342 246l36 36"/>
+    <path d="M378 246l-36 36"/>
+
+    <!-- equal -->
+    <path d="M338 338h44"/>
+    <path d="M338 360h44"/>
+  </g>
+</svg>
+
+
