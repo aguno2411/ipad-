@@ -1,16 +1,13 @@
 :root{
   --bg:#0b0f14;
   --panel:#0f1620;
-  --panel2:#0c121b;
   --text:#e7edf7;
   --muted:#8fa2ba;
-  --op:#1d6cff;
-  --eq:#19c37d;
-  --util:#263344;
-  --btn:#141d29;
-  --btn2:#101824;
-  --shadow: 0 10px 40px rgba(0,0,0,.35);
-  --radius: 18px;
+  --line: rgba(255,255,255,.10);
+  --btn: #121a25;
+  --btn-2: #101721;
+  --accent: #2c7dff;
+  --radius: 16px;
 }
 
 *{box-sizing:border-box}
@@ -18,7 +15,7 @@ html,body{height:100%}
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Segoe UI", sans-serif;
-  background: radial-gradient(1200px 800px at 50% -10%, #172233 0%, var(--bg) 55%) fixed;
+  background: var(--bg);
   color:var(--text);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
@@ -35,10 +32,9 @@ body{
 }
 
 .display{
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border: 1px solid rgba(255,255,255,.06);
+  background: var(--panel);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
   padding: 14px 14px 10px;
   min-height: 128px;
   display:flex;
@@ -79,23 +75,22 @@ body{
 }
 
 .btn{
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--btn);
   color: var(--text);
   min-height: 64px;
   font-size: 22px;
   font-weight: 600;
-  box-shadow: 0 8px 18px rgba(0,0,0,.25);
   user-select:none;
   touch-action: manipulation;
 }
-.btn:active{transform: translateY(1px); filter: brightness(1.05)}
+.btn:active{background: var(--btn-2)}
 
-.num{background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015))}
-.util{background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); color:#d5e3f7}
-.op{background: linear-gradient(180deg, rgba(29,108,255,.35), rgba(29,108,255,.10)); border-color: rgba(29,108,255,.35)}
-.eq{background: linear-gradient(180deg, rgba(25,195,125,.35), rgba(25,195,125,.10)); border-color: rgba(25,195,125,.35)}
+.num{background: var(--btn)}
+.util{background: var(--panel)}
+.op{background: rgba(44,125,255,.16); border-color: rgba(44,125,255,.30)}
+.eq{background: var(--accent); border-color: rgba(44,125,255,.65)}
 
 .zero{grid-column: span 2}
 
@@ -107,7 +102,7 @@ body{
 }
 
 @media (prefers-reduced-motion: reduce){
-  .btn:active{transform:none}
+  .btn:active{background: var(--btn-2)}
 }
 
 
